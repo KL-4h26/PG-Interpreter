@@ -2,13 +2,13 @@
 // Программа на PG
 // Таблица умножения от 1 до 10
 
-num1 := 1m
+num1 := 1
 
 while (num1 != 11){
     show($"=== :num1: ===")
     num2 := 1
     while (num2 != 11){
-        show($":num1: * :num2: = :num1 * num2:")
+        show($">num1< * >num2< = >num1 * num2<")
         num2 += 1
     }
     num1 += 1
