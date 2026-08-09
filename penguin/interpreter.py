@@ -1,5 +1,6 @@
 from globals import variables, errors, STANDART_LITERAL_ADDITION
 from type import DataType
+import sys
 
 
 class Interpreter:
@@ -56,7 +57,7 @@ class Interpreter:
 
             if not command:
                 print(errors["strange_command"])
-                exit(1)
+                sys.exit(1)
 
             command(*parts)
 
@@ -84,7 +85,7 @@ class Interpreter:
 
         if not ci:
             print(errors["instruction_not_found"])
-            exit(1)
+            sys.exit(1)
 
         ci(value)
 
@@ -100,7 +101,7 @@ class Interpreter:
 
         if not structure:
             print(errors["structure_not_found"])
-            exit(1)
+            sys.exit(1)
 
         attrs = [DataType(attr) for attr in args[1][0:-1]]  # Последнее литерал, не учитываем
         ltrl = args[1][-1]
@@ -198,7 +199,7 @@ self.functions["{func_name}"] = {func_name}
         # Проверка на присутствие переменной (только в случае если знак не присваивания)
         if not variables.get(var_name) and var_operation != ":=":
             print(errors["var_is_underfined"])
-            exit(1)
+            sys.exit(1)
 
         try:
             match var_operation:
@@ -219,7 +220,7 @@ self.functions["{func_name}"] = {func_name}
 
         except TypeError:
             print(errors["type_error"])
-            exit(1)
+            sys.exit(1)
 
 
 
@@ -235,7 +236,7 @@ self.functions["{func_name}"] = {func_name}
 
         if not func:
             print(errors["function_not_found"])
-            exit(1)
+            sys.exit(1)
 
         result = func(*attrs)
 
@@ -279,7 +280,7 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1 or not args[0].type in (str,):
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         return len(args[0].data)
 
@@ -307,7 +308,7 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         types = {
             int: "int",
@@ -325,7 +326,7 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         return f'"{args[0].data}"'
 
@@ -337,14 +338,14 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         try:
             return int(args[0].data)
 
         except TypeError:
             print(errors["type_error"])
-            exit(1)
+            sys.exit(1)
 
 
     def float_func(self, *args):
@@ -354,14 +355,14 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         try:
             return float(args[0].data)
 
         except TypeError:
             print(errors["type_error"])
-            exit(1)
+            sys.exit(1)
 
 
     def bool_func(self, *args):
@@ -378,7 +379,7 @@ self.functions["{func_name}"] = {func_name}
 
         except TypeError:
             print(errors["type_error"])
-            exit(1)
+            sys.exit(1)
 
 
     #=== Структуры (глобального вида) ===#
@@ -392,11 +393,11 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         elif args[0].type != bool:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
 
         if args[0].data == True:
@@ -411,11 +412,11 @@ self.functions["{func_name}"] = {func_name}
         """
         if len(args) != 1:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         elif args[0].type != bool:
             print(errors["arguments_not_valid"])
-            exit(1)
+            sys.exit(1)
 
         while DataType(args[0].original_data).data == True:
             Interpreter(code).run()

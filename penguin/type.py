@@ -4,6 +4,7 @@ from boolrule import BoolRule
 import random
 import string
 import regex
+import sys
 
 class DataType:
     """
@@ -68,7 +69,7 @@ class DataType:
 
         else:
             print(errors["var_is_underfined"])
-            exit(1)
+            sys.exit(1)
 
         return lambda data: variables[data].data if variables.get(data) else None
 
@@ -84,15 +85,15 @@ class DataType:
 
         else:
             print(errors["data_not_valid"])
-            exit(1)
+            sys.exit(1)
 
     def format_string(self, data):
         pure_string = data[2:-1]
         
-        values_in_string = regex.findall(r':([^:]*):', pure_string)
+        values_in_string = regex.findall(r'>((?:[^><]++|(?R))*+)<', pure_string)
 
         for value in values_in_string:
-            pure_string =pure_string.replace(f":{value}:", str(DataType(value).data))
+            pure_string =pure_string.replace(f">{value}<", str(DataType(value).data))
 
         return pure_string
             
@@ -126,11 +127,11 @@ class DataType:
 
         except TypeError:
             print(errors["type_error"])
-            exit(1)
+            sys.exit(1)
 
         except:
             print(errors["arifmetic_error"])
-            exit(1)
+            sys.exit(1)
                 
 
     def operation_execute(self, operation):

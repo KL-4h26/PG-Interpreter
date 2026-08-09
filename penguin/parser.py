@@ -18,13 +18,13 @@ class Parser:
         
         self.commands_regex = {  # Ожидаемые команды
             # Данные формата РЕГЕКС: функция
-            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*(:=|\+=|-=|\*=|\/=|%=|\+\+|--|=)\s*(.+)$': self.variable_match,
-            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)$': self.function,
-            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}$': self.structure_open,  # Предназначен для открытия структуры
-            lambda literal=self.literal: fr'^{" " * literal}(?:function\s+)?(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\s*\((?P<args>(?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}$': lambda match: self.structure_open(match, True),
+            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*(:=|\+=|-=|\*=|\/=|%=|\+\+|--|=)\s*(.+?)(?:\s*//.*)?\s*$': self.variable_match,
+            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)(?:\s*//.*)?\s*$': self.function,
+            lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}(?:\s*//.*)?\s*$': self.structure_open,  # Предназначен для открытия структуры
+            lambda literal=self.literal: fr'^{" " * literal}(?:function\s+)?(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\s*\((?P<args>(?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}(?:\s*//.*)?\s*$': lambda match: self.structure_open(match, True),
             # lambda literal=self.literal: fr'^{" " * (literal - 4)}\{"}"}\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}$': self.structure_continue,
-            lambda literal=self.literal: fr'^{" " * (literal - 4)}{"}"}$': self.structure_close,  # Предназначен для закрытия структуры
-            lambda literal=self.literal: fr'^{" " * (literal)}([a-zA-Z_][a-zA-Z0-9_]*)\s+(.+)$': self.conditional_instruction,
+            lambda literal=self.literal: fr'^{" " * (literal - 4)}{"}"}(?:\s*//.*)?\s*$': self.structure_close,  # Предназначен для закрытия структуры
+            lambda literal=self.literal: fr'^{" " * (literal)}([a-zA-Z_][a-zA-Z0-9_]*)\s+(.+?)(?:\s*//.*)?\s*$': self.conditional_instruction,
             lambda literal=self.literal: fr'^{" " * literal}//.*$': lambda mtch: 0  # Заглушка, это комментарий
         }
 

@@ -2,14 +2,19 @@ from argparse import ArgumentParser
 from interpreter import Interpreter
 from globals import VERSION, errors, global_interpretter
 from parser import Parser
+import sys
 
 def start(data: list[str]):
-    parser = Parser(data)
-    translated = parser.parse()
-    #print(translated)
-    interpreter = Interpreter(translated)
-    global_interpretter[0] = interpreter
-    interpreter.run()
+    try:
+        parser = Parser(data)
+        translated = parser.parse()
+        #print(translated)
+        interpreter = Interpreter(translated)
+        global_interpretter[0] = interpreter
+        interpreter.run()
+    except KeyboardInterrupt:
+        print('\n\x1b[31m[ ! ] Bye\x1b[0m')
+        sys.exit(0)
 
 
 argument_parser = ArgumentParser(
