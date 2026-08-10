@@ -13,5 +13,6 @@ errors = {
     "arguments_not_valid": f"\x1b[31m[ ! ] The arguments provided are invalid or do not meet the standards.\x1b[0m",
     "type_error": f"\x1b[31m[ ! ] Cannot perform an operation on the types.\x1b[0m",
     "invalid_literal": f"\x1b[31m[ ! ] Invalid literal for structure, maybe you not open structure?.\x1b[0m",
-    "arifmetic_error": f"\x1b[31m[ ! ] The specified arithmetic expression is incorrect.\x1b[0m"
+    "arifmetic_error": f"\x1b[31m[ ! ] The specified arithmetic expression is incorrect.\x1b[0m",
+    "return_outside": f"\x1b[31m[ ! ] We are not in function, you can't return value\x1b[0m"
 }

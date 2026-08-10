@@ -22,7 +22,7 @@ class Parser:
             lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)(?:\s*//.*)?\s*$': self.function,
             lambda literal=self.literal: fr'^{" " * literal}([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}(?:\s*//.*)?\s*$': self.structure_open,  # Предназначен для открытия структуры
             lambda literal=self.literal: fr'^{" " * literal}(?:function\s+)?(?P<name>[a-zA-Z_][a-zA-Z0-9_]*)\s*\((?P<args>(?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}(?:\s*//.*)?\s*$': lambda match: self.structure_open(match, True),
-            # lambda literal=self.literal: fr'^{" " * (literal - 4)}\{"}"}\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}$': self.structure_continue,
+            lambda literal=self.literal: fr'^{" " * (literal - 4)}\{"}"}\s*([a-zA-Z_][a-zA-Z0-9_]*)\s*\(((?:[^()]*(?:\((?2)\)[^()]*)*))\)\s*\{"{"}$': self.structure_alternative,
             lambda literal=self.literal: fr'^{" " * (literal - 4)}{"}"}(?:\s*//.*)?\s*$': self.structure_close,  # Предназначен для закрытия структуры
             lambda literal=self.literal: fr'^{" " * (literal)}([a-zA-Z_][a-zA-Z0-9_]*)\s+(.+?)(?:\s*//.*)?\s*$': self.conditional_instruction,
             lambda literal=self.literal: fr'^{" " * literal}//.*$': lambda mtch: 0  # Заглушка, это комментарий
@@ -93,8 +93,8 @@ class Parser:
             (line, "STRUCTURE_OPEN" if not define_func else "DEFINE_FUNCTION")
         )
 
-    """
-    def structure_continue(self, match: re.Match):
+
+    def structure_alternative(self, match: re.Match):
 
         line = [grp.strip() for grp in match.groups()]
 
@@ -102,9 +102,9 @@ class Parser:
         line[1].append(self.literal)
 
         self.translated.append(
-            (line, "STRUCTURE_CONTINUE")
+            (line, "STRUCTURE_ALTERNATIVE")
         )
-    """
+
 
     def structure_close(self, match: re.Match):
         """

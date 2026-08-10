@@ -18,6 +18,7 @@ class Interpreter:
             "VAR_OPERATION": self.var_operation,
             "FUNCTION": self.function_search,
             "STRUCTURE_OPEN": self.structure_search,
+            "STRUCTURE_ALTERNATIVE": self.structure_search,
             "STRUCTURE_CLOSE": self.structure_close,  # Вообще вызыватся не должен (не будет),
             "DEFINE_FUNCTION": self.define_function,
             "CONDT_INSTRUCT": self.conditional_instruction
@@ -41,6 +42,8 @@ class Interpreter:
         }
         self.structures = {
             "if": self.if_struct,
+            "else": self.else_struct,
+            "elif": self.if_struct,
             "while": self.while_struct
         }
         
@@ -54,7 +57,7 @@ class Interpreter:
             parts = self.code[self.code_line][0]
 
             command = self.commands.get(instruction)
-
+            
             if not command:
                 print(errors["strange_command"])
                 sys.exit(1)
@@ -106,19 +109,29 @@ class Interpreter:
         attrs = [DataType(attr) for attr in args[1][0:-1]]  # Последнее литерал, не учитываем
         ltrl = args[1][-1]
 
-        code_to_struct = []
+        code_to_struct_alter = []
+        code_to_struct_end = []
+
+        for line in self.code[self.code_line + 1:]:
+            if line[1] == "STRUCTURE_ALTERNATIVE" and line[0][1][-1] == ltrl:
+                break
+
+            elif line[1] == "STRUCTURE_CLOSE" and line[0][-1] == ltrl - STANDART_LITERAL_ADDITION:
+                break
+
+            code_to_struct_alter.append(line)
 
         for line in self.code[self.code_line + 1:]:
             if line[1] == "STRUCTURE_CLOSE" and line[0][-1] == ltrl - STANDART_LITERAL_ADDITION:
                 break
 
-            code_to_struct.append(line)
+            code_to_struct_end.append(line)
 
         # Структура выполняется (типо)
-        structure(code_to_struct, *attrs)
+        result = structure(code_to_struct_alter, *attrs)
 
-        # Скипаем отрезок
-        self.code_line += len(code_to_struct) + 1
+        # Скипаем отрезок (если структура не сработала (вернула False), она переходит К АЛЬТЕРНАТИВУ, инчае фулл скип)
+        self.code_line += len(code_to_struct_end) + 1 if result else len(code_to_struct_alter)
     
 
     def structure_close(self, *args):
@@ -252,8 +265,8 @@ self.functions["{func_name}"] = {func_name}
         Возврат значения из функции (если мы в функции)
         """
         if not self.we_are_in_custom_function:
-            print("Мы не в функции, ты не можешь вызвать return")
-            exit(1)
+            print(errors["return_outside"])
+            sys.exit(1)
 
         self.return_value = value.data
 
@@ -399,9 +412,15 @@ self.functions["{func_name}"] = {func_name}
             print(errors["arguments_not_valid"])
             sys.exit(1)
 
-
         if args[0].data == True:
             Interpreter(code).run()
+            return True  # Скипаем
+
+        return False  # Перейти к альтернативу
+
+    def else_struct(self, code, *args):
+        Interpreter(code).run()
+        return True
 
 
     def while_struct(self, code, *args):
@@ -420,3 +439,5 @@ self.functions["{func_name}"] = {func_name}
 
         while DataType(args[0].original_data).data == True:
             Interpreter(code).run()
+
+        return True

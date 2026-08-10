@@ -96,6 +96,7 @@ class DataType:
             pure_string =pure_string.replace(f">{value}<", str(DataType(value).data))
 
         return pure_string
+
             
     def math_execute(self, example):
         """
@@ -106,6 +107,7 @@ class DataType:
             exmp = ""
             tokenize = self.arifmetic_tokenize(example)
             vars = {}
+
             for token in tokenize:
                 #exmp += str(DataType(token).data) if not token in ("+", "-", "/", "*", "%") else token
                 if token in ("+", "-", "/", "*", "%"):
@@ -175,7 +177,7 @@ class DataType:
 
 
     def arifmetic_tokenize(self, expression):
-        # Паттерн для всех токенов, включая отрицательные числа
+        # Паттерн для всех токенов
         pattern = r'''
             (?:
                 # Отрицательные числа (минус с пробелами или без)
@@ -185,8 +187,13 @@ class DataType:
                 '(?:\\.|[^\'\\])*' |
                 # Положительные числа
                 \d+(?:\.\d+)? |
-                # Вызовы функций
-                [a-zA-Z_]\w*\s*\((?:(?R)|[^()]*)\) |
+                # Вызовы функций - рекурсивный паттерн для вложенных скобок
+                [a-zA-Z_]\w*\s*\(
+                    (?:
+                        [^()]* |
+                        (?R)
+                    )*
+                \) |
                 # Идентификаторы
                 [a-zA-Z_]\w* |
                 # Операторы (включая минус, но он будет перехвачен только если не является частью отрицательного числа)

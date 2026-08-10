@@ -12,6 +12,7 @@ def start(data: list[str]):
         interpreter = Interpreter(translated)
         global_interpretter[0] = interpreter
         interpreter.run()
+        
     except KeyboardInterrupt:
         print('\n\x1b[31m[ ! ] Bye\x1b[0m')
         sys.exit(0)
