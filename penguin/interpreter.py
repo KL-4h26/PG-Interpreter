@@ -356,7 +356,7 @@ self.functions["{func_name}"] = {func_name}
         try:
             return int(args[0].data)
 
-        except TypeError:
+        except:
             print(errors["type_error"])
             sys.exit(1)
 
@@ -373,7 +373,7 @@ self.functions["{func_name}"] = {func_name}
         try:
             return float(args[0].data)
 
-        except TypeError:
+        except:
             print(errors["type_error"])
             sys.exit(1)
 
@@ -390,7 +390,7 @@ self.functions["{func_name}"] = {func_name}
         try:
             return bool(args[0].data)
 
-        except TypeError:
+        except:
             print(errors["type_error"])
             sys.exit(1)
 
@@ -413,13 +413,25 @@ self.functions["{func_name}"] = {func_name}
             sys.exit(1)
 
         if args[0].data == True:
-            Interpreter(code).run()
+            interpreter = Interpreter(code)
+            interpreter.we_are_in_custom_function = True if self.we_are_in_custom_function else False
+
+            result = interpreter.run()
+            if self.we_are_in_custom_function:
+                self.return_value = DataType(str(result)).data
+                
             return True  # Скипаем
 
         return False  # Перейти к альтернативу
 
     def else_struct(self, code, *args):
-        Interpreter(code).run()
+        interpreter = Interpreter(code)
+        interpreter.we_are_in_custom_function = True if self.we_are_in_custom_function else False
+
+        result = interpreter.run()
+        if self.we_are_in_custom_function:
+            self.return_value = DataType(str(result)).data
+            
         return True
 
 
@@ -438,6 +450,10 @@ self.functions["{func_name}"] = {func_name}
             sys.exit(1)
 
         while DataType(args[0].original_data).data == True:
-            Interpreter(code).run()
+            interpreter = Interpreter(code)
+            interpreter.we_are_in_custom_function = True if self.we_are_in_custom_function else False
+            result = interpreter.run()
+            if self.we_are_in_custom_function:
+                self.return_value = DataType(str(result)).data
 
         return True

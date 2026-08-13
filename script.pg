@@ -1,15 +1,27 @@
-
 // Программа на PG
-// Таблица умножения от 1 до 10
 
-num1 := 1
-
-while (num1 != 11){
-    show($"=== >num1< ===")
-    num2 := 1
-    while (num2 != 11){
-        show($">num1< * >num2< = >num1 * num2<")
-        num2 += 1
+function calculate(first, second, act){
+    if (act == '+'){
+        return first + second
+    } elif (act == '-'){
+        return first - second
+    } elif (act == '*'){
+        return first * second
+    } elif (act == '/'){
+        return first / second
+    } else() {
+        show($"=== Error: strange act: >act<")
+        stop()
     }
-    num1 += 1
 }
+
+while (True){
+    result := calculate(toint(input("=== first num: ")), toint(input("=== second num: ")), input("=== Act: "))
+    show($'=== Result: >result<  ==')
+    
+    leave := input('? Type "q" if you wanna leave: ')
+    if (leave == "q"){
+        stop()
+    }
+}
+
