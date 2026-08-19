@@ -1,27 +1,25 @@
 // Программа на PG
 
-function calculate(first, second, act){
-    if (act == '+'){
-        return first + second
-    } elif (act == '-'){
-        return first - second
-    } elif (act == '*'){
-        return first * second
-    } elif (act == '/'){
-        return first / second
-    } else() {
-        show($"=== Error: strange act: >act<")
+include "lib.pg"
+
+NUM_WHAT_I_GUESS := random_int(1, 100)
+attempts := 5
+
+show($"=== Я загадал число от 1 до 100, отгадай его за >attempts< попытки ===")
+
+while (attempts != 0){
+    attempts -= 1
+
+    user_num := toint(input(">>> Ваше число: "))
+
+    if (user_num == NUM_WHAT_I_GUESS){
+        show("=== Поздравляю! Вы победили ===")
         stop()
+    } elif (user_num > NUM_WHAT_I_GUESS){
+        show($"=== Не угадали! Мое число меньше, осталось попыток: >attempts< ===")
+    } elif (user_num < NUM_WHAT_I_GUESS){
+        show($"=== Не угадали! Мое число больше, осталось попыток: >attempts< ===")
     }
 }
 
-while (True){
-    result := calculate(toint(input("=== first num: ")), toint(input("=== second num: ")), input("=== Act: "))
-    show($'=== Result: >result<  ==')
-    
-    leave := input('? Type "q" if you wanna leave: ')
-    if (leave == "q"){
-        stop()
-    }
-}
-
+show($"=== Очень жаль, вы проиграли! Мое число было: >NUM_WHAT_I_GUESS< ===")

@@ -25,7 +25,8 @@ class Interpreter:
         }
         self.conditional_instructions = {
             "echo": self.echo,
-            "return": self.return_instr
+            "return": self.return_instr,
+            "include": self.include_instr
         }
         self.functions = {
             "show": self.show_func,
@@ -33,6 +34,7 @@ class Interpreter:
             "input": self.input,
             "lenght": self.len_func,
             "stop": self.stop_func,
+            "python": self.python_func,
 
             # Функции приведения типов
             "tostr": self.str_func,
@@ -252,6 +254,7 @@ self.functions["{func_name}"] = {func_name}
             sys.exit(1)
 
         result = func(*attrs)
+        result = f'"{result}"' if type(result) == str else result
 
         # if result != None нельзя заменить на if result, False так же являетс
         # Допустимым значением
@@ -259,6 +262,23 @@ self.functions["{func_name}"] = {func_name}
 
     #=== Условные инструкции (упрощенные функции) ===#
     # ВСЕГДА принимают один аргумент
+
+    def include_instr(self, value: DataType):
+        """
+        Вставка кода из файла
+        """
+        from parser import Parser
+        try:
+            with open(value.data, "r") as file:
+                parser = Parser(file.read().split("\n")).parse()
+                parser.reverse()
+
+                for line in parser:
+                    self.code.insert(self.code_line + 1, line)
+
+        except Exception as e:
+            print(errors["include_error"])
+            exit(1)
 
     def return_instr(self, value: DataType):
         """
@@ -268,6 +288,7 @@ self.functions["{func_name}"] = {func_name}
             print(errors["return_outside"])
             sys.exit(1)
 
+        #print(value, value.data)
         self.return_value = value.data
 
 
@@ -279,6 +300,14 @@ self.functions["{func_name}"] = {func_name}
 
     #=== Функции (глобального вида) ===#
     # Принимают любое колличество аргументов, могут возвращать значения DataType
+
+    def python_func(self, *args):
+        if len(args) != 1 or not args[0].type in (str,):
+            print(errors["arguments_not_valid"])
+            sys.exit(1)
+
+        exec(args[0].data)
+
 
     def stop_func(self, *args):
         """
@@ -341,7 +370,7 @@ self.functions["{func_name}"] = {func_name}
             print(errors["arguments_not_valid"])
             sys.exit(1)
 
-        return f'"{args[0].data}"'
+        return str(args[0].data)
 
 
     def int_func(self, *args):
@@ -354,7 +383,7 @@ self.functions["{func_name}"] = {func_name}
             sys.exit(1)
 
         try:
-            return int(args[0].data)
+            return int(args[0].data) if args[0].type != str else int(args[0].data[1:-1])
 
         except:
             print(errors["type_error"])
@@ -371,7 +400,7 @@ self.functions["{func_name}"] = {func_name}
             sys.exit(1)
 
         try:
-            return float(args[0].data)
+            return float(args[0].data) if args[0].type != str else float(args[0].data[1:-1])
 
         except:
             print(errors["type_error"])

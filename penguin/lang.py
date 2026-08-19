@@ -33,7 +33,7 @@ if args.file:
 
     except Exception as e:
         print(errors["file_not_found"])
-        exit(1)
+        sys.exit(1)
 
     start(data.split("\n"))
 

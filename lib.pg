@@ -1,0 +1,7 @@
+
+function random_int(num1, num2){
+    // Функция с использованием Python кода
+    python("import random; variables['num1'] = DataType(str(random.randint(variables['num1'].data, variables['num2'].data)))")
+    
+    return num1
+}
