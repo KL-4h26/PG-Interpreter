@@ -3,11 +3,32 @@
 
 PG 0.0.3 это интерпретируемый язык программирования, написанный на Python, мой первый интерпритатор вышедший за рамки статичных команд и отсутствием нормальных конструкций. Имеет втроенные функции и структуры (конструкции), поддерживает создание переменных и функций, разные типы данных и операции с ними. Подробнее обо всем разберем ниже.
 
-1. [Переменные](https://github.com/KL-4h26/PG-Interpreter#--переменные)
-2. [Условные инструкции](https://github.com/KL-4h26/PG-Interpreter#--условные-инструкции)
-3. [Конструкции](https://github.com/KL-4h26/PG-Interpreter#--конструкции)
-4. [Кастомные функции](https://github.com/KL-4h26/PG-Interpreter#--собственные-функции)
-5. [Пару слов](https://github.com/KL-4h26/PG-Interpreter#--пару-слов)
+1. [Установка и запуск](https://github.com/KL-4h26/PG-Interpreter#--установка)
+2. [Переменные](https://github.com/KL-4h26/PG-Interpreter#--переменные)
+3. [Условные инструкции](https://github.com/KL-4h26/PG-Interpreter#--условные-инструкции)
+4. [Конструкции](https://github.com/KL-4h26/PG-Interpreter#--конструкции)
+5. [Кастомные функции](https://github.com/KL-4h26/PG-Interpreter#--собственные-функции)
+6. [Пару слов](https://github.com/KL-4h26/PG-Interpreter#--пару-слов)
+
+## - Установка
+Для начала установим наш интерпритатор и запустим первую программу  
+`git clone https://github.com/KL-4h26/PG-Interpreter`
+
+Установив репозиторий зайдем в него и создадим виртуальное окружение  
+`python -m venv venv`
+
+Активируем его  
+`source venv/bin/activate`  
+или если вы на Windows:  
+`source venv\Script\activate`
+
+Скачиваем зависимости из requirements.txt  
+`pip install -r requirements.txt`
+
+И запускаем нашу первую программу на PG:  
+`python penguin/lang.py -f script.pg`  
+При желании можно собрать в исполняемый файл через pyinsaller
+
 
 ## - Переменные
 Давайте определим несколько переменных используя наш язык программирования:
