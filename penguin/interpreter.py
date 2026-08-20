@@ -9,6 +9,7 @@ class Interpreter:
     Важно что бы код был "пережёван" с использованием класса Parser
     """
     def __init__(self, code: list):
+        # Предназначено для выполнения кода в функции
         self.return_value = None  # Меняется только через инструкцию return
         self.we_are_in_custom_function = False
 

@@ -20,7 +20,7 @@ PG 0.0.3 это интерпретируемый язык программиро
 Активируем его  
 `source venv/bin/activate`  
 или если вы на Windows:  
-`source venv\Script\activate`
+`source venv\Scripts\activate`
 
 Скачиваем зависимости из requirements.txt  
 `pip install -r requirements.txt`
