@@ -1,4 +1,5 @@
 # **Язык программирования - PG**
+![icon](https://i.ibb.co/9H1985bn/lv-0-20260809150558.png)
 
 <p align="center">
   <img src="https://i.ibb.co/9H1985bn/lv-0-20260809150558.png" width="350" height="350">
